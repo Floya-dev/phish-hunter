@@ -27,3 +27,4 @@ Keyword (leave blank to initiate scan):
 
 - [ ] Add feature to fetch older posts
 - [ ] Add an option to not show no hits
+- [ ] Daily report of top targeted brands or keywords
