@@ -16,7 +16,7 @@ $ python3 all.py
 Keyword (leave blank to initiate scan):
 ```
 
-Options:
+### Options:
 
 Look for specific keywords
 
@@ -43,6 +43,6 @@ $ python3 all.py -oh
 ## To-do
 
 - [ ] Add feature to fetch older posts
-- [ x ] Add an option to not show no hits
+- [x] Add an option to not show no hits (only hits)
 - [ ] Daily report of top targeted brands or keywords
 - [ ] Add an option to only fetch selected APIs
