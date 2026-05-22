@@ -1,11 +1,15 @@
 import requests
 import time
 import sys
+import argparse
 
 fetch = False
 keywords = []
 
-oh = '-oh' in sys.argv
+parser = argparse.ArgumentParser()
+parser.add_argument('--api', choices=['phishstats', 'openphish', 'phishunt', 'all'], default='all')
+parser.add_argument('-oh', '--oh', action='store_true')
+args = parser.parse_args()
 
 def fetch_phishstats():
     try:
@@ -61,14 +65,17 @@ def hunt():
     
     all_urls = []
     
-    print("[*] Fetching from PhishStats")
-    all_urls += fetch_phishstats()
+    if args.api in ['phishstats', 'all']:
+        print("[*] Fetching from PhishStats")
+        all_urls += fetch_phishstats()
     
-    print("[*] Fetching from OpenPhish")
-    all_urls += fetch_openphish()
+    if args.api in ['openphish', 'all']:
+        print("[*] Fetching from OpenPhish")
+        all_urls += fetch_openphish()
     
-    print("[*] Fetching from PhishHunt")
-    all_urls += fetch_phishunt()
+    if args.api in ['phishunt', 'all']:
+        print("[*] Fetching from PhishHunt")
+        all_urls += fetch_phishunt()
     
     print(f"\n[*] Total URLs: {len(all_urls)}\n")
     
@@ -88,7 +95,7 @@ def hunt():
             unmatched_entries.append(entry)
             
     for entry in unmatched_entries:
-        if not oh:
+        if not args.oh:
             print(f"[-] [{entry['source']}] {entry['url'][:70]}")
         
     if matched_entries:

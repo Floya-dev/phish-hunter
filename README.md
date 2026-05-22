@@ -51,4 +51,4 @@ $ python3 all.py -oh
 - [ ] Add feature to fetch older posts
 - [x] Add an option to not show no hits (only hits)
 - [ ] Daily report of top targeted brands or keywords
-- [ ] Add an option to only fetch selected APIs
+- [x] Add an option to only fetch selected APIs
