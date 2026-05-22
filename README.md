@@ -9,11 +9,28 @@ Created for my internship at [Gendigital](https://gendigital.com/)/[Avast](https
 
 ## Usage
 
+To show both hits and no hits:
+
 ```bash
+$ python3 all.py
+Keyword (leave blank to initiate scan):
+```
+
+Options:
+
+Look for specific keywords
+
+```
 $ python3 all.py
 Keyword (leave blank to initiate scan): login
 Added: login
 Keyword (leave blank to initiate scan):
+```
+
+`-oh` = Only hits
+
+```
+$ python3 all.py -oh
 ```
 
 ## Features
@@ -26,5 +43,6 @@ Keyword (leave blank to initiate scan):
 ## To-do
 
 - [ ] Add feature to fetch older posts
-- [ ] Add an option to not show no hits
+- [ x ] Add an option to not show no hits
 - [ ] Daily report of top targeted brands or keywords
+- [ ] Add an option to only fetch selected APIs

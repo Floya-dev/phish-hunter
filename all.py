@@ -5,14 +5,16 @@ import sys
 fetch = False
 keywords = []
 
+oh = '-oh' in sys.argv
+
 def fetch_phishstats():
     try:
-        url = "https://api.phishstats.info/api/phishing?_sort=-date&_size=20" # Phistats limits one user to 20 queries per minute
+        url = "https://api.phishstats.info/api/phishing?_sort=-date&_size=100"
         r = requests.get(url, timeout=10)
         return [
-            {"url": e.get("url", ""), "source": "PhishStats", "title": ""}
+            {"url": e.get("url", ""), "source": "PhishStats", "title": e.get("title", "") or ""}
             for e in r.json()
-            if "bad gateway" not in e.get("title", "").lower()
+            if "bad gateway" not in (e.get("title", "") or "").lower()
         ]
     except:
         return []
@@ -86,14 +88,13 @@ def hunt():
             unmatched_entries.append(entry)
             
     for entry in unmatched_entries:
-        print(f"[-] [{entry['source']}] {entry['url'][:70]}")
+        if not oh:
+            print(f"[-] [{entry['source']}] {entry['url'][:70]}")
         
     if matched_entries:
         print(f"\n{'='*20} MATCHED URLs {'='*20}\n")
         for entry in matched_entries:
             print(f"[!] [{entry['source']}] MATCH: {entry['url']}")
-            if entry['title']:
-                print(f"   Title/Tags: {entry['title']}")
             
     hits = len(matched_entries)
     
