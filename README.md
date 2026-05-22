@@ -1,5 +1,11 @@
 <div align="center">
 
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-white.png">
+    <source media="(prefers-color-scheme: light)" srcset="assets/logo-black.png">
+    <img alt="Project Logo" src="assets/logo-black.png" width="100">
+  </picture>
+
 # Floya's Phish Hunter
 
 A python script to filter latest URLs from [PhishStats](https://phishstats.info/), [OpenPhish](https://openphish.com/), [PhishHunt](https://phishunt.io/)
