@@ -15,8 +15,6 @@ Created for my internship at [Gendigital](https://gendigital.com/)/[Avast](https
 
 ## Usage
 
-To show both hits and no hits:
-
 ```bash
 $ python3 all.py
 Keyword (leave blank to initiate scan):
@@ -24,19 +22,24 @@ Keyword (leave blank to initiate scan):
 
 ### Options:
 
-Look for specific keywords
+`--api` Use only selected APIs:
 
-```
-$ python3 all.py
-Keyword (leave blank to initiate scan): login
-Added: login
-Keyword (leave blank to initiate scan):
+```bash
+$ python3 all.py -api phishstats
+$ python3 all.py -api openphish
+$ python3 all.py -api phishhunt
 ```
 
-`-oh` = Only hits
+`-oh` or `--only-hits` = Only show hits
 
 ```
 $ python3 all.py -oh
+```
+
+`-o` or `--once` = Run only once
+
+```bash
+$ python3 all.py -o
 ```
 
 ## Features
@@ -48,7 +51,12 @@ $ python3 all.py -oh
 
 ## To-do
 
+- [x] Add an option to run once
+- [ ] Add GIF showcase to `README.md`
 - [ ] Add feature to fetch older posts
 - [x] Add an option to not show no hits (only hits)
 - [ ] Daily report of top targeted brands or keywords
 - [x] Add an option to only fetch selected APIs
+- [ ] Move configurable values to `config.yaml`
+- [ ] Rich x raw output options
+- [ ] Exportable into csv or json

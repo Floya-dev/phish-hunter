@@ -8,7 +8,8 @@ keywords = []
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--api', choices=['phishstats', 'openphish', 'phishunt', 'all'], default='all')
-parser.add_argument('-oh', '--oh', action='store_true')
+parser.add_argument('-oh', '--only-hits', action='store_true')
+parser.add_argument('-o', '--once', action='store_true')
 args = parser.parse_args()
 
 def fetch_phishstats():
@@ -95,7 +96,7 @@ def hunt():
             unmatched_entries.append(entry)
             
     for entry in unmatched_entries:
-        if not args.oh:
+        if not args.only_hits:
             print(f"[-] [{entry['source']}] {entry['url'][:70]}")
         
     if matched_entries:
@@ -111,5 +112,7 @@ def hunt():
 
 while True:
     hunt()
+    if args.once:
+        break
     print("\n [*] Waiting 120 seconds before next scan...\n")
     time.sleep(120)
