@@ -3,18 +3,55 @@ import time
 import sys
 import argparse
 
+# Default config.yaml
+config = {
+    'hunt_settings': {
+        'interval_seconds': 120,
+        'default_api': 'all',
+        'only_hits': False,
+        'run_once': False
+    },
+    'api_endpoints': {
+        'phishstats': "https://api.phishstats.info/api/phishing?_sort=-date&_size=100",
+        'openphish': "https://openphish.com/feed.txt",
+        'phishunt': "https://phishunt.io/feed.txt"
+    },
+    'keywords': []
+}
+
+try:
+    import yaml
+    with open("config.yaml", "r") as f:
+        yaml_config = yaml.safe_load(f)
+        if yaml_config:
+            if 'hunt_settings' in yaml_config:
+                config['hunt_settings'].update(yaml_config['hunt_settings'])
+            if 'api_endpoints' in yaml_config:
+                config['api_endpoints'].update(yaml_config['api_endpoints'])
+            if 'keywords' in yaml_config:
+                config['keywords'] = yaml_config['keywords']
+except ImportError:
+    print("[!] PyYAML module is required to read config.yaml")
+except FileNotFoundError:
+    pass
+except Exception as e:
+    print(f"[!] Error loading config.yaml: {e}")
+
 fetch = False
 keywords = []
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--api', choices=['phishstats', 'openphish', 'phishunt', 'all'], default='all')
-parser.add_argument('-oh', '--only-hits', action='store_true')
-parser.add_argument('-o', '--once', action='store_true')
+parser.add_argument('--api', choices=['phishstats', 'openphish', 'phishunt', 'all'], default=config['hunt_settings']['default_api'])
+parser.add_argument('-oh', '--only-hits', action='store_true', default=None)
+parser.add_argument('-o', '--once', action='store_true', default=None)
 args = parser.parse_args()
+
+only_hits = args.only_hits if args.only_hits is not None else config['hunt_settings']['only_hits']
+once = args.once if args.once is not None else config['hunt_settings']['run_once']
 
 def fetch_phishstats():
     try:
-        url = "https://api.phishstats.info/api/phishing?_sort=-date&_size=100"
+        url = config['api_endpoints']['phishstats']
         r = requests.get(url, timeout=10)
         return [
             {"url": e.get("url", ""), "source": "PhishStats", "title": e.get("title", "") or ""}
@@ -26,14 +63,16 @@ def fetch_phishstats():
 
 def fetch_openphish():
     try:
-        r = requests.get("https://openphish.com/feed.txt", timeout=10)
+        url = config['api_endpoints']['openphish']
+        r = requests.get(url, timeout=10)
         return [{"url": u, "source": "OpenPhish", "title": ""} for u in r.text.strip().split('\n')[:20]]
     except:
         return []
 
 def fetch_phishunt():
     try:
-        r = requests.get("https://phishunt.io/feed.txt", timeout=10)
+        url = config['api_endpoints']['phishunt']
+        r = requests.get(url, timeout=10)
         return [{"url": u, "source": "PhishHunt", "title": ""} for u in r.text.strip().split('\n')[:20]]
     except:
         return []
@@ -52,12 +91,12 @@ def hunt():
         wordlist()
         fetch = True
     if keywords == []:
-        try:
-            with open("keywords.txt", "r") as f:
-                keywords = [line.strip().lower() for line in f if line.strip()]
-            print("[/] No keywords entered. Using default keywords from keywords.txt.")
-        except FileNotFoundError:
-            print("[!] keywords.txt not found. Download it from my GitHub repo.")
+        config_keywords = config.get("keywords", [])
+        if config_keywords:
+            keywords = [k.strip().lower() for k in config_keywords if k.strip()]
+            print("[/] No keywords entered. Using keywords from config.yaml.")
+        else:
+            print("[!] No keywords found in config.yaml.")
             sys.exit(1)
             
     print(f"\n{'='*60}")
@@ -96,7 +135,7 @@ def hunt():
             unmatched_entries.append(entry)
             
     for entry in unmatched_entries:
-        if not args.only_hits:
+        if not only_hits:
             print(f"[-] [{entry['source']}] {entry['url'][:70]}")
         
     if matched_entries:
@@ -112,7 +151,8 @@ def hunt():
 
 while True:
     hunt()
-    if args.once:
+    if once:
         break
-    print("\n [*] Waiting 120 seconds before next scan...\n")
-    time.sleep(120)
+    interval = config['hunt_settings']['interval_seconds']
+    print(f"\n [*] Waiting {interval} seconds before next scan...\n")
+    time.sleep(interval)

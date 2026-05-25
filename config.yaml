@@ -1,0 +1,61 @@
+hunt_settings:
+  interval_seconds: 120
+  default_api: all
+  only_hits: false
+  run_once: false
+
+api_endpoints:
+  phishstats: "https://api.phishstats.info/api/phishing?_sort=-date&_size=100"
+  openphish: "https://openphish.com/feed.txt"
+  phishunt: "https://phishunt.io/feed.txt"
+
+keywords:
+  - apple
+  - zoom
+  - google
+  - facebook
+  - office365
+  - gmail
+  - xbox
+  - crypto
+  - login
+  - recovery
+  - verify
+  - secure
+  - meta
+  - twitter
+  - tiktok
+  - psn
+  - discord
+  - amazon
+  - paypal
+  - auth
+  - free
+  - validation
+  - token
+  - verification
+  - telegram
+  - pdf
+  - download
+  - shop
+  - microsoft
+  - bet
+  - fund
+  - coin
+  - netflix
+  - bank
+  - chase
+  - wellsfrago
+  - coinbase
+  - binance
+  - suspend
+  - urgent
+  - unusual
+  - limited
+  - restore
+  - unlock
+  - discord
+  - steam
+  - confirm
+  - update
+  - account

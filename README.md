@@ -57,6 +57,6 @@ $ python3 all.py -o
 - [x] Add an option to not show no hits (only hits)
 - [ ] Daily report of top targeted brands or keywords
 - [x] Add an option to only fetch selected APIs
-- [ ] Move configurable values to `config.yaml`
+- [x] Move configurable values to `config.yaml`
 - [ ] Rich x raw output options
 - [ ] Exportable into csv or json
