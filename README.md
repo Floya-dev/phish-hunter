@@ -47,7 +47,8 @@ $ python3 all.py -o
 * Fetch URLs from PhishStats, OpenPhish, PhishHunt
 * Filter URLs based on keywords
 * 2 minute delay between scans
-* Default keywords (./keywords.txt)
+* Default keywords 
+* Configurable (./config.yaml)
 
 ## To-do
 
