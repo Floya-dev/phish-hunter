@@ -49,6 +49,12 @@ $ python3 all.py -oh
 $ python3 all.py -o
 ```
 
+`-r` or `--raw` = Raw output
+
+```bash
+$ python3 all.py -r
+```
+
 ## Features
 
 - Fetch URLs from PhishStats, OpenPhish, PhishHunt
@@ -66,5 +72,6 @@ $ python3 all.py -o
 - [ ] Daily report of top targeted brands or keywords
 - [x] Add an option to only fetch selected APIs
 - [x] Move configurable values to `config.yaml`
-- [ ] Rich x raw output options
+- [x] Rich x raw output options
 - [ ] Exportable into csv or json
+- [ ] Add help

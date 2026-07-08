@@ -3,6 +3,7 @@ hunt_settings:
   default_api: all
   only_hits: false
   run_once: false
+  raw: false
 
 api_endpoints:
   phishstats: "https://api.phishstats.info/api/phishing?_sort=-date&_size=100"

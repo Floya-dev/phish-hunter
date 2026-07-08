@@ -9,7 +9,8 @@ config = {
         'interval_seconds': 120,
         'default_api': 'all',
         'only_hits': False,
-        'run_once': False
+        'run_once': False,
+        'raw': False
     },
     'api_endpoints': {
         'phishstats': "https://api.phishstats.info/api/phishing?_sort=-date&_size=100",
@@ -44,10 +45,12 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--api', choices=['phishstats', 'openphish', 'phishunt', 'all'], default=config['hunt_settings']['default_api'])
 parser.add_argument('-oh', '--only-hits', action='store_true', default=None)
 parser.add_argument('-o', '--once', action='store_true', default=None)
+parser.add_argument('-r', '--raw', action='store_true', default=None)
 args = parser.parse_args()
 
 only_hits = args.only_hits if args.only_hits is not None else config['hunt_settings']['only_hits']
 once = args.once if args.once is not None else config['hunt_settings']['run_once']
+raw = args.raw if args.raw is not None else config['hunt_settings']['raw']
 
 def fetch_phishstats():
     try:
@@ -88,36 +91,43 @@ def wordlist():
 def hunt():
     global keywords, fetch
     if not fetch:
-        wordlist()
+        if not raw:
+            wordlist()
         fetch = True
     if keywords == []:
         config_keywords = config.get("keywords", [])
         if config_keywords:
             keywords = [k.strip().lower() for k in config_keywords if k.strip()]
-            print("[/] No keywords entered. Using keywords from config.yaml.")
+            if not raw:
+                print("[/] No keywords entered. Using keywords from config.yaml.")
         else:
-            print("[!] No keywords found in config.yaml.")
+            if not raw:
+                print("[!] No keywords found in config.yaml.")
             sys.exit(1)
-            
-    print(f"\n{'='*60}")
-    print(f"  FLOYA'S PHISH HUNTER - {time.strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"{'='*60}\n")
+    if not raw:
+        print(f"\n{'='*60}")
+        print(f"  FLOYA'S PHISH HUNTER - {time.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"{'='*60}\n")
     
     all_urls = []
     
     if args.api in ['phishstats', 'all']:
-        print("[*] Fetching from PhishStats")
+        if not raw:
+            print("[*] Fetching from PhishStats")
         all_urls += fetch_phishstats()
     
     if args.api in ['openphish', 'all']:
-        print("[*] Fetching from OpenPhish")
+        if not raw:
+            print("[*] Fetching from OpenPhish")
         all_urls += fetch_openphish()
     
     if args.api in ['phishunt', 'all']:
-        print("[*] Fetching from PhishHunt")
+        if not raw:
+            print("[*] Fetching from PhishHunt")
         all_urls += fetch_phishunt()
     
-    print(f"\n[*] Total URLs: {len(all_urls)}\n")
+    if not raw:
+        print(f"\n[*] Total URLs: {len(all_urls)}\n")
     
     matched_entries = []
     unmatched_entries = []
@@ -135,24 +145,29 @@ def hunt():
             unmatched_entries.append(entry)
             
     for entry in unmatched_entries:
-        if not only_hits:
+        if not only_hits and not raw:
             print(f"[-] [{entry['source']}] {entry['url'][:70]}")
         
     if matched_entries:
-        print(f"\n{'='*20} MATCHED URLs {'='*20}\n")
+        if not raw:
+            print(f"\n{'='*20} MATCHED URLs {'='*20}\n")
         for entry in matched_entries:
-            print(f"[!] [{entry['source']}] MATCH: {entry['url']}")
-            
+            if raw:
+                print(entry['url'])
+            else:
+                print(f"[!] [{entry['source']}] MATCH: {entry['url']}")
     hits = len(matched_entries)
     
-    print(f"\n{'='*60}")
-    print(f"  Results: {hits} matches out of {len(all_urls)} URLs")
-    print(f"{'='*60}")
+    if not raw:
+        print(f"\n{'='*60}")
+        print(f"  Results: {hits} matches out of {len(all_urls)} URLs")
+        print(f"{'='*60}")
 
 while True:
     hunt()
     if once:
         break
     interval = config['hunt_settings']['interval_seconds']
-    print(f"\n [*] Waiting {interval} seconds before next scan...\n")
+    if not raw:
+        print(f"\n [*] Waiting {interval} seconds before next scan...\n")
     time.sleep(interval)
