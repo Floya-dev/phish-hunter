@@ -91,3 +91,7 @@ $ python3 all.py -r
 - [x] Rich x raw output options
 - [ ] Exportable into csv or json
 - [x] Add help
+
+## Contribution
+
+This is rather my personal project, that was formerly part of my internship at Gen. Feel free to fork it and improve it. If you want to directly contribute to this repository, hit me up with ideas.
