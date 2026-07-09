@@ -29,6 +29,22 @@ Keyword (leave blank to initiate scan):
 
 ### Options:
 
+`-h` or `--help` = Shows information about each option
+
+```bash
+$ python3 all.py -h
+usage: all.py [-h] [--api {phishstats,openphish,phishunt,all}] [-oh] [-o] [-r]
+
+options:
+  -h, --help            show this help message and exit
+  --api {phishstats,openphish,phishunt,all}
+                        Select one of the provided APIs, instead of all at once.
+  -oh, --only-hits      Show only URLs that match your filter.
+  -o, --once            Run the process only once, by default there is a 120 second delay between fetches. (Due to
+                        API rate limitation)
+  -r, --raw             Raw output, only hit URLs, no formatting. Good for parsing into a file.
+```
+
 `--api` Use only selected APIs:
 
 ```bash
@@ -74,4 +90,4 @@ $ python3 all.py -r
 - [x] Move configurable values to `config.yaml`
 - [x] Rich x raw output options
 - [ ] Exportable into csv or json
-- [ ] Add help
+- [x] Add help
