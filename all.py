@@ -41,7 +41,7 @@ except Exception as e:
 fetch = False
 keywords = []
 
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(description="Fetch and filter phishing URLs.")
 parser.add_argument('--api', choices=['phishstats', 'openphish', 'phishunt', 'all'], default=config['hunt_settings']['default_api'], help="Select one of the provided APIs, instead of all at once.")
 parser.add_argument('-oh', '--only-hits', action='store_true', default=None, help="Show only URLs that match your filter.")
 parser.add_argument('-o', '--once', action='store_true', default=None, help="Run the process only once, by default there is a 120 second delay between fetches. (Due to API rate limitation)")
